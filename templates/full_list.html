@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-5">Full List</h1>
+    <div class="section">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="fw-bold">Name</th>
+                    <th class="fw-bold">Warranty Duration</th>
+                    <th class="fw-bold">Date Bought</th>
+                    <th class="fw-bold">Thumbnail</th>
+                    <th class="fw-bold">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.warranty_dur }} months</td>
+                    <td>{{ item.date_bought }}</td>
+                    <td>
+                        {% if item.thumbnail %}
+                            <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ url_for('static', filename=item.thumbnail[7:]) }}">
+                        {% endif %}
+                    </td>                    
+                    <td>
+                        <a href="{{ url_for('delete_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Delete </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="text-align: right;">
+            <a href="{{ url_for('delete_all_items_route')}}" class="btn btn-danger btn-sm"> Delete All </a>
+        </div>
+    </div>
+    <a href="{{ url_for('home')}}" class="btn btn-dark btn-sm"> Back </a>
+</div>
+{% endblock %}
