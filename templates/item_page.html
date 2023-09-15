@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<body>
+    <div class="container my-5">
+        <h1 class="mb-5">Item Details</h1>
+        <div class="section">
+            <h2>Item Name: {{ item[1] }}</h2>
+            <p>Warranty Expiration Date: {{ item[4] }}</p>
+            <p>Date Bought: {{ item[2] }}</p>
+            <img src="{{ url_for('static', filename=item[3][7:]) }}" alt="{{ item[3][7:] }}" width="50" height="50">
+        </div>
+        <div class="section">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

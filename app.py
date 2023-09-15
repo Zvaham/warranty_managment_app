@@ -160,6 +160,30 @@ def home():
     recent_items = get_recent_items()
     return render_template('home.html', closest_items=closest_items, recent_items=recent_items)
 
+@app.route('/item_page/<int:item_id>', methods=['GET'])
+def item_page(item_id):
+    try:
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute(
+            "SELECT id, name, date_bought, '' || thumbnail, warranty_expiration_date "
+            "FROM items "
+            "WHERE id = ?",
+            (item_id,)
+        )
+        item = c.fetchone()
+        if item:
+            return render_template('item_page.html', item=item, file_path=file_path)
+        else:
+            return "Item not found", 404
+    
+    except sqlite3.Error as e:
+        app.logger.info("SQLite error:", e)
+    
+    finally:
+        conn.close()
+
+
 @app.route('/add', methods=['GET', 'POST'])
 def add_item_route():
     if request.method == 'POST':
@@ -175,6 +199,7 @@ def add_item_route():
             thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
             os.makedirs(thumbnail_dir, exist_ok=True) 
             thumbnail_path = os.path.join(thumbnail_dir, random_filename)
+            thumbnail_path = thumbnail_path.replace('\\', '/')
             thumbnail.save(thumbnail_path)
             save_resize_thumbnail(thumbnail_path, 95)
 
@@ -195,14 +220,12 @@ def full_list():
 
 @app.route('/delete/<int:item_id>', methods=['POST', 'GET'])
 def delete_item_route(item_id):
-    app.logger.info(f"Received POST request to delete item {item_id}")
     delete_item_database(item_id)
     return redirect('/full_list')
 
 
 @app.route('/delete_all', methods=['POST', 'GET'])
 def delete_all_items_route():
-    app.logger.info(f"Received POST request to delete all items")
     delete_all_items()
     return redirect('/')
 

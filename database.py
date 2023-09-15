@@ -9,6 +9,7 @@ def create_database():
     c.execute('''CREATE TABLE IF NOT EXISTS lists
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                  name TEXT NOT NULL)''')
+    
     c.execute('''CREATE TABLE IF NOT EXISTS items
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                  list_id INTEGER NOT NULL,
@@ -56,7 +57,7 @@ def get_closest_items(list_id):
 def get_recent_items(list_id):
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute("SELECT * FROM items WHERE list_id=? ORDER BY id DESC LIMIT 3", (list_id,))
+    c.execute("SELECT * FROM items WHERE list_id=? ORDER BY id DESC LIMIT 5", (list_id,))
     items = c.fetchall()
     conn.close()
     return items

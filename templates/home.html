@@ -1,14 +1,30 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
+<style>
+    /* Add a CSS style block for styling */
+    .horizontal-list {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .horizontal-list li {
+        margin-right: 20px; /* Add spacing between items */
+    }
+</style>
+
 <div class="container my-5">
     <h1 class="mb-5">Warranty Tracking App</h1>
     <div class="section">
         <h2>Items Closest to Expiration</h2>
-        <ul>
+        <ul class="horizontal-list">
             {% for item in closest_items %}
                 <li>
-                    <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    <a href="{{ url_for('item_page', item_id=item[0]) }}">
+                        <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    </a>
                     {{ item[1] }} - Warranty Expires on {{ item[4] }}
                 </li>
             {% endfor %}
@@ -17,16 +33,19 @@
 
     <div class="section my-5">
         <h2>Recently Added Items</h2>
-        <ul>
+        <ul class="horizontal-list">
             {% for item in recent_items %}
                 <li>
-                    <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    <a href="{{ url_for('item_page', item_id=item[0]) }}">
+                        <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    </a>
                     {{ item[1] }} - Added on {{ item[4] }}
                 </li>
             {% endfor %}
         </ul>
     </div>
-
+    
+    
     <div class="section">
         <a href="{{ url_for('add_item_route') }}" class="btn btn-primary btn-lg">Add New Item</a>
         <a href="{{ url_for('full_list') }}" class="btn btn-secondary btn-lg">View Full List</a>
