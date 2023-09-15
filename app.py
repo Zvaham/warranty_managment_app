@@ -31,7 +31,7 @@ def create_database():
     finally:
         conn.close()
 
-def get_items():
+def get_all_items():
     try:
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
@@ -152,6 +152,7 @@ def save_resize_thumbnail(thumbnail_path, thumbnail_size_px=100):
 
 
 @app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
 def home():
     if not os.path.exists(DATABASE):
         create_database()
@@ -193,7 +194,6 @@ def item_page(item_id):
     finally:
         conn.close()
 
-
 @app.route('/add', methods=['GET', 'POST'])
 def add_item_route():
     if request.method == 'POST':
@@ -218,7 +218,7 @@ def add_item_route():
 
 @app.route('/full_list', methods=['GET'])
 def full_list():
-    items_list = get_items()
+    items_list = get_all_items()
     items_dict = [{'id': item[0], 'name': item[1], 'warranty_dur': item[2], 'date_bought': item[3], 'thumbnail': item[4], 'timestamp': item[5]} for item in items_list]
     for item in items_dict:
         if item['thumbnail']:
@@ -238,6 +238,28 @@ def delete_all_items_route():
     delete_all_items()
     return redirect('/')
 
+@app.route('/closest_to_expiry')
+def closest_to_expiry():
+    items_list =  get_closest_expiration() 
+    items_dict = [{'id': item[0], 'name': item[1], 'date_bought': item[2], 'thumbnail': item[3], 'warranty_expiration_date': item[4]} for item in items_list]
+    for item in items_dict:
+        if item['thumbnail']:
+            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
+
+    return render_template('closest_to_expiry.html', closest_items=items_dict)
+
+@app.route('/recently_added')
+def recently_added():
+    items_list = get_recent_items()
+    items_dict = [{'id': item[0], 'name': item[1], 'date_bought': item[2], 'thumbnail': item[3], 'warranty_expiration_date': item[4]} for item in items_list]
+    for item in items_dict:
+        if item['thumbnail']:
+            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
+
+    return render_template('recently_added.html', recent_items=items_dict)
+
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

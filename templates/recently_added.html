@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<body>
+    <div class="container my-5">
+        <h1 class="mb-5">Recently Added Items</h1>
+        <div class="section">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="fw-bold">Thumbnail</th>
+                        <th class="fw-bold">Name</th>
+                        <th class="fw-bold">Date Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in recent_items %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('item_page', item_id=item.id) }}">
+                                    {% if item.thumbnail %}
+                                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="50" height="50">
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="btn btn-link">
+                                    {{ item.name }}
+                                </a>
+                            </td>
+                            <td>{{ item.date_bought }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="text-align: right;">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+{% endblock %}
