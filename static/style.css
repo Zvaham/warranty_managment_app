@@ -5,6 +5,7 @@ body {
   margin: 0;
 }
 
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -112,4 +113,11 @@ li.list-group-item {
 /* Active link styling */
 .nav-link.active {
   background-color: #333;
+}
+
+/* Define custom styles for the progress bar */
+.custom-progress {
+  background-color: #ff5722; /* Change the background color to a custom color */
+  height: 80px; /* Change the height of the progress bar */
+  /* Add other custom styles as needed */
 }

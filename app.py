@@ -136,20 +136,19 @@ def delete_all_items():
 def calculate_expiration_date(warranty_dur):
     current_date = datetime.now()
     future_date = (current_date + relativedelta(months=warranty_dur)).date()
-    return(future_date)
+    return future_date
+
+def days_until_expiration(future_date):
+    current_date = datetime.now().date()
+    return (future_date - current_date).days
+
 
 def save_resize_thumbnail(thumbnail_path, thumbnail_size_px=100):
-    try:           
-        output_size = (thumbnail_size_px, thumbnail_size_px)
-        i = Image.open(thumbnail_path)
-        i.thumbnail(output_size)
-        i.save(thumbnail_path)
-    except Exception as e:
-        app.logger.info(f"Error saving thumbnail: {e}")
-        print(f"Error saving thumbnail: {e}")
-        return None
-    finally:
-        return thumbnail_path
+    output_size = (thumbnail_size_px, thumbnail_size_px)
+    i = Image.open(thumbnail_path)
+    i.thumbnail(output_size)
+    i.save(thumbnail_path)
+    return thumbnail_path
 
 
 @app.route('/', methods=['GET'])
@@ -173,9 +172,18 @@ def item_page(item_id):
         )
         item = c.fetchone()
         if item:
+            expiration_date = datetime.strptime(item[4], "%Y-%m-%d").date()
+            buying_date = datetime.strptime(item[2], "%Y-%m-%d").date()
+
+            days_to_expiration = days_until_expiration(expiration_date)
+            total_warranty_days = (expiration_date - buying_date).days
+
+            progress_width = (days_to_expiration / total_warranty_days) * 100
+
             thumbnail_file = os.path.basename(item[3])
             thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
-            return render_template('item_page.html', item=item, file_path=thumbnail_path)
+            return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
+        
         else:
             return "Item not found", 404
     

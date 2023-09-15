@@ -9,13 +9,23 @@
             <h2>Item Name: {{ item[1] }}</h2>
             <p>Warranty Expiration Date: {{ item[4] }}</p>
             <p>Date Bought: {{ item[2] }}</p>
-            <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="50" height="50">
+            
+            {% if days_to_expiration >= 0 %}
+                <p>Days until warranty expiration: {{ days_to_expiration }}</p>
+                <div class="progress">
+                    <div class="progress-bar custom-progress" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
+                </div>
+                
+
+            {% else %}
+                <p>Warranty Expired</p>
+
+            {% endif %}
+
+            <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="150" height="150">
         </div>
-        <div class="section">
-            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
-        </div>
+        <a href="{{ url_for('home')}}" class="btn btn-dark btn-sm"> Back </a>
     </div>
 </body>
-</html>
 
 {% endblock %}
