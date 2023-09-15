@@ -173,7 +173,9 @@ def item_page(item_id):
         )
         item = c.fetchone()
         if item:
-            return render_template('item_page.html', item=item, file_path=file_path)
+            thumbnail_file = os.path.basename(item[3])
+            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
+            return render_template('item_page.html', item=item, file_path=thumbnail_path)
         else:
             return "Item not found", 404
     
@@ -199,7 +201,6 @@ def add_item_route():
             thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
             os.makedirs(thumbnail_dir, exist_ok=True) 
             thumbnail_path = os.path.join(thumbnail_dir, random_filename)
-            thumbnail_path = thumbnail_path.replace('\\', '/')
             thumbnail.save(thumbnail_path)
             save_resize_thumbnail(thumbnail_path, 95)
 
