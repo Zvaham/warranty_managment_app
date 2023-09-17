@@ -1,48 +1,46 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-5">Full List</h1>
-    <div class="section">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="fw-bold">Name</th>
-                    <th class="fw-bold">Warranty Duration</th>
-                    <th class="fw-bold">Date Bought</th>
-                    <th class="fw-bold">Thumbnail</th>
-                    <th class="fw-bold">Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.warranty_dur }} months</td>
-                    <td>{{ item.date_bought }}</td>
-                    
-                    <td>
-                        {% if item.thumbnail %}
-                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.thumbnail }}" width="50" height="50">
-                        {% endif %}
-                    </td>                    
-
-                    <td>
-                        <a href="{{ url_for('update_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Update </a>
-                        <a href="{{ url_for('delete_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Delete </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div style="text-align: right;">
-            <a href="{{ url_for('delete_all_items_route')}}" class="btn btn-danger btn-sm"> Delete All </a>
+<body>
+    <div class="container my-5" data-bs-theme="dark">
+        <h1 class="mb-5 text-center" style="color: aliceblue;">Full List</h1>
+        <div class="section card border-secondary mb-3">
+            <table class="table table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th class="fw-bold text-center">Name</th>
+                        <th class="fw-bold text-center">Warranty Duration</th>
+                        <th class="fw-bold text-center">Date Bought</th>
+                        <th class="fw-bold text-center">Thumbnail</th>
+                        <th class="fw-bold text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.warranty_dur }} months</td>
+                            <td>{{ item.date_bought }}</td>
+                            <td class="text-center">
+                                {% if item.thumbnail %}
+                                <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="100" height="100">
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('update_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Update </a>
+                                <a href="{{ url_for('delete_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Delete </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center custom-margin">
+                <a href="{{ url_for('delete_all_items_route')}}" class="btn btn-danger"> Delete All </a>
+            </div>
+        </div>
+        <div class="text-center custom-margin">
+            <a href="{{ url_for('home')}}" type="button" class="btn btn-dark"> Back </a>
         </div>
     </div>
-    <a href="{{ url_for('home')}}" type="button" class="btn btn-dark btn-rounded"> Back </a>
-
-</div>
+</body>
 {% endblock %}
-
-

@@ -1,33 +1,41 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-5">Add Item</h1>
-    <div class="section">      
-        <form action="{{ url_for('add_item_route') }}" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
+<div class="container my-5" data-bs-theme="dark">
+    <h1 class="mb-5 text-center custom-margin" style="color: aliceblue;">Add Item</h1>
+    <div class="card border-secondary mb-3">
+        <div class="section">
+            <form action="{{ url_for('add_item_route') }}" method="POST" enctype="multipart/form-data">
+                
+                <div class="mb-3 custom-margin">
+                    <label for="name" class="form-label" style='color: whitesmoke;'>Name:</label>
+                    <input type="text" class="bg-body-secondary mb-3 form-control" id="name" name="name" required>
+                </div>
 
-            <div class="mb-3">
-                <label for="warranty_dur" class="form-label">Warranty Duration (in months):</label>
-                <input type="number" class="form-control" id="warranty_dur" name="warranty_dur" required>
-            </div>
+                <div class="mb-3 custom-margin">
+                    <label for="warranty_dur" class="form-label" style='color: whitesmoke;'>Warranty Duration (in months):</label>
+                    <input type="number" class="bg-body-secondary mb-3 form-control" id="warranty_dur" name="warranty_dur" required>
+                </div>
 
-            <div class="mb-3">
-                <label for="date_bought" class="form-label">Date Bought:</label>
-                <input type="date" class="form-control" id="date_bought" name="date_bought" required>
-            </div>
+                <div class="mb-3 custom-margin">
+                    <label for="date_bought" class="form-label" style='color: whitesmoke;'>Date Bought:</label>
+                    <input type="date" class="bg-body-secondary mb-3 form-control" id="date_bought" name="date_bought" required>
+                </div>
 
-            <div class="mb-3">
-                <label for="thumbnail" class="form-label">Thumbnail Image: <span style="font-style: italic; color: grey;">*Optional</span> </label>
-                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-rounded">Add Item</button>
-        </form>
+                <div class="mb-3 custom-margin">
+                    <label for="thumbnail" class="form-label" style='color: whitesmoke;'>Thumbnail Image: <span style="font-style: italic; color: grey;">*Optional</span></label>
+                    <input type="file" class="bg-body-secondary mb-3 form-control" id="thumbnail" name="thumbnail" accept="image/*">
+                </div>
+                <div class="text-center custom-margin">
+                    <button type="submit" class="btn btn-primary">Add Item</button>
+                </div>
+                
+            </form>
+        </div>
     </div>
-    <a href="{{ url_for('home')}}" class="btn btn-dark btn-sm btn-rounded"> Back </a>
+
+    <div class="text-center">
+        <a href="{{ url_for('home') }}" class="btn btn-dark">Back</a>
+    </div>
 </div>
 {% endblock %}

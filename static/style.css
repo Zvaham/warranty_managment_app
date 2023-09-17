@@ -2831,7 +2831,39 @@ textarea.form-control-lg {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+    .horizontal-list {
+        display: flex;
+        list-style: none;
+        padding: 5;
+    }
 
+    .horizontal-list li {
+        margin-right: 10px; /* Add spacing between items */
+    }
+
+    .custom-margin {
+        margin: 15px; /* Adjust the margin size as needed */
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card {
+        width: 100%; /* Adjust the card width as needed */
+        margin: 2%; /* Add spacing between cards */
+    }
+    
+    .card-body {
+        text-align: left;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 .valid-feedback {
   display: none;
   width: 100%;
@@ -12203,4 +12235,38 @@ table,
 
 .list-group {
   font-size: 0.9625rem;
+}
+
+.horizontal-list {
+  display: flex;
+  list-style: none;
+  padding: 5;
+}
+
+.horizontal-list li {
+  margin-right: 10px; /* Add spacing between items */
+}
+
+.custom-margin {
+  margin: 15px; /* Adjust the margin size as needed */
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 100%; /* Adjust the card width as needed */
+  margin: 2%; /* Add spacing between cards */
+}
+
+.card-body {
+  text-align: left;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }

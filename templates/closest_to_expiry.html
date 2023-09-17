@@ -3,44 +3,42 @@
 {% block content %}
 
 <body>
-    <div class="container my-5">
-        <h1 class="mb-5">Closest to Expiry</h1>
-        <div class="section">
+    <div class="container my-5" data-bs-theme="dark">
+        <h1 class="mb-5 text-center" style="color: aliceblue;">Closest to Expiry</h1>
+        <div class="section card border-secondary mb-3">
             <table class="table table-striped">
-                <thead>
+                <thead class="table-primary">
                     <tr>
-                        <th class="fw-bold">Thumbnail</th>
-                        <th class="fw-bold">Name</th>
-                        <th class="fw-bold">Expiry Date</th>
+                        <th class="fw-bold text-center">Thumbnail</th>
+                        <th class="fw-bold text-center">Name</th>
+                        <th class="fw-bold text-center">Expiry Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in closest_items %}
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ url_for('item_page', item_id=item.id) }}">
                                     {% if item.thumbnail %}
-                                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="50" height="50">
+                                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="100" height="100">
                                     {% endif %}
                                 </a>
                             </td>
-                            <td>
-                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="btn btn-link">
+                            <td class="text-center">
+                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="text-secondary text-center" style="font-size: 24px;">
                                     {{ item.name }}
                                 </a>
                             </td>
-                            <td>{{ item.date_bought }}</td>
+                            <td class="text-secondary text-center" style="font-size: 18px;">{{ item.date_bought }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="section">
-            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+        <div class="text-center">
+            <a href="{{ url_for('home') }}" class="btn btn-dark">Back to Home</a>
         </div>
     </div>
 </body>
-
-
 
 {% endblock %}

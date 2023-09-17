@@ -199,9 +199,7 @@ def home():
         create_database()
     closest_items = list_to_dict(get_closest_expiration())
     recent_items = list_to_dict(get_recent_items())
-    app.logger.info(f"Closest items: {closest_items}")
-    app.logger.info("################################")
-    app.logger.info(f"Recent items: {recent_items}")
+
     return render_template('home.html', closest_items=closest_items, recent_items=recent_items)
 
 @app.route('/item_page/<int:item_id>', methods=['GET']) # TODO: Move 
