@@ -15,40 +15,54 @@
     }
 </style>
 
-<div class="container my-5">
+<div class="container my-5" data-bs-theme="dark">
     <h1 class="mb-5">Warranty Tracking App</h1>
-    <div class="section">
-        <h2>Items Closest to Expiration</h2>
-        <ul class="horizontal-list">
+
+    <div class="mb-3" style="max-width: 90;">
+        <div class="section">
+            <a href="{{ url_for('add_item_route') }}" type="button" class="btn btn-dark btn-rounded">Add New Item</a>
+            <a href="{{ url_for('full_list') }}" type="button" class="btn btn-dark btn-rounded">View Full List</a>
+        </div>
+
+    </div>
+    <div class="card border-primary mb-3" style="max-width: 90;">
+        <div class="card-header">
+            <h4>Closest Expirations</h4>
+        </div>
+        <div class="card-body">
+          <ul class="horizontal-list">
             {% for item in closest_items %}
                 <li>
-                    <a href="{{ url_for('item_page', item_id=item[0]) }}">
-                        <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    <a href="{{ url_for('item_page', item_id=item['id']) }}">
+                        <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}" width="100" height="100">
                     </a>
-                    {{ item[1] }} - Warranty Expires on {{ item[4] }}
+                </li>
+                <li>
+                    {{ item['name'] }} - Warranty Expires on {{ item['warranty_expiry_date'] }}
                 </li>
             {% endfor %}
         </ul>
+        </div>
     </div>
 
-    <div class="section my-5">
-        <h2>Recently Added Items</h2>
-        <ul class="horizontal-list">
+    <div class="card border-primary mb-3" style="max-width: 90;">
+        <div class="card-header">
+            <h4>Recently Added</h4>
+        </div>
+        <div class="card-body">
+          <ul class="horizontal-list">
             {% for item in recent_items %}
                 <li>
-                    <a href="{{ url_for('item_page', item_id=item[0]) }}">
-                        <img src="{{ item[3] }}" alt="{{ item[1] }}" width="50" height="50">
+                    <a href="{{ url_for('item_page', item_id=item['id']) }}">
+                        <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}" width="100" height="100">
                     </a>
-                    {{ item[1] }} - Added on {{ item[4] }}
+                </li>
+                <li>
+                    {{ item['name'] }} - Warranty Expires on {{ item['warranty_expiration_date'] }}
                 </li>
             {% endfor %}
         </ul>
-    </div>
-    
-    
-    <div class="section">
-        <a href="{{ url_for('add_item_route') }}" class="btn btn-primary btn-lg">Add New Item</a>
-        <a href="{{ url_for('full_list') }}" class="btn btn-secondary btn-lg">View Full List</a>
+        </div>
     </div>
 </div>
 

@@ -21,12 +21,15 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.warranty_dur }} months</td>
                     <td>{{ item.date_bought }}</td>
+                    
                     <td>
                         {% if item.thumbnail %}
-                            <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ url_for('static', filename=item.thumbnail[7:]) }}">
+                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.thumbnail }}" width="50" height="50">
                         {% endif %}
                     </td>                    
+
                     <td>
+                        <a href="{{ url_for('update_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Update </a>
                         <a href="{{ url_for('delete_item_route', item_id=item['id']) }}" class="btn btn-danger btn-sm"> Delete </a>
                     </td>
                 </tr>
@@ -37,6 +40,9 @@
             <a href="{{ url_for('delete_all_items_route')}}" class="btn btn-danger btn-sm"> Delete All </a>
         </div>
     </div>
-    <a href="{{ url_for('home')}}" class="btn btn-dark btn-sm"> Back </a>
+    <a href="{{ url_for('home')}}" type="button" class="btn btn-dark btn-rounded"> Back </a>
+
 </div>
 {% endblock %}
+
+

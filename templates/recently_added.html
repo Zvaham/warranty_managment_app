@@ -25,19 +25,16 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="btn btn-link">
-                                    {{ item.name }}
+                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="btn btn-link"> {{ item.name }}
                                 </a>
                             </td>
                             <td>{{ item.date_bought }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
-            </table>
-            <div style="text-align: right;">
-                <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
-            </div>
+            </table>            
         </div>
+        <a href="{{ url_for('home') }}" class="btn btn-dark btn-sm btn-rounded">Back</a>
     </div>
 </body>
 

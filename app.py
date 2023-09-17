@@ -31,6 +31,22 @@ def create_database():
     finally:
         conn.close()
 
+def get_item_by_id(item_id):
+    try:
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute("SELECT * FROM items WHERE id=?", (item_id,))
+        item = c.fetchone()
+        return item
+
+    except sqlite3.Error as e:
+        app.logger.info("SQLite error:", e)
+        print("SQLite error:", e)
+        return None 
+
+    finally:
+        conn.close()
+
 def get_all_items():
     try:
         conn = sqlite3.connect(DATABASE)
@@ -52,7 +68,7 @@ def get_closest_expiration():
         c = conn.cursor()
         current_date = datetime.now().date()
         c.execute(
-            "SELECT id, name, date_bought, '' || thumbnail, warranty_expiration_date "
+            "SELECT id, name, warranty_dur, date_bought, '' || thumbnail, warranty_expiration_date "
             "FROM items "
             "WHERE warranty_expiration_date >= ? "
             "ORDER BY warranty_expiration_date "
@@ -73,7 +89,7 @@ def get_recent_items():
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute(
-            "SELECT id, name, date_bought, '' || thumbnail, strftime('%Y-%m-%d', date_bought) as formatted_date "
+            "SELECT id, name, warranty_dur, date_bought, '' || thumbnail, strftime('%Y-%m-%d', date_bought) as formatted_date "
             "FROM items "
             "ORDER BY date_bought DESC "
             "LIMIT 5"
@@ -87,7 +103,7 @@ def get_recent_items():
     finally:
         conn.close()
 
-def add_item(name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
+def add_item_database(name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
     try:
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
@@ -95,6 +111,24 @@ def add_item(name, warranty_dur, date_bought, thumbnail, warranty_expiration_dat
                 (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date))
         conn.commit()
         
+    except sqlite3.Error as e:
+        app.logger.info(f"SQLite error:", e)
+        print("SQLite error:", e)
+
+    finally:
+        conn.close()
+
+def update_item_database(item_id, name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
+    try:
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute(
+            "UPDATE items SET name=?, warranty_dur=?, date_bought=?, thumbnail=?, warranty_expiration_date=? WHERE id=?",
+            (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date, item_id)
+        )
+        conn.commit()
+        print(f"Updated item with ID {item_id}")
+
     except sqlite3.Error as e:
         app.logger.info(f"SQLite error:", e)
         print("SQLite error:", e)
@@ -142,13 +176,20 @@ def days_until_expiration(future_date):
     current_date = datetime.now().date()
     return (future_date - current_date).days
 
-
-def save_resize_thumbnail(thumbnail_path, thumbnail_size_px=100):
+def save_resize_thumbnail(thumbnail_path, thumbnail_size_px=150):
     output_size = (thumbnail_size_px, thumbnail_size_px)
     i = Image.open(thumbnail_path)
     i.thumbnail(output_size)
     i.save(thumbnail_path)
     return thumbnail_path
+
+def list_to_dict(items_list):
+    items_dict = [{'id': item[0], 'name': item[1], 'warranty_dur': item[2],'date_bought': item[3], 'thumbnail': item[4], 'warranty_expiration_date': item[5]} for item in items_list]
+    for item in items_dict:
+
+        if item['thumbnail']:
+            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
+    return items_dict
 
 
 @app.route('/', methods=['GET'])
@@ -156,44 +197,36 @@ def save_resize_thumbnail(thumbnail_path, thumbnail_size_px=100):
 def home():
     if not os.path.exists(DATABASE):
         create_database()
-    closest_items = get_closest_expiration()
-    recent_items = get_recent_items()
+    closest_items = list_to_dict(get_closest_expiration())
+    recent_items = list_to_dict(get_recent_items())
+    app.logger.info(f"Closest items: {closest_items}")
+    app.logger.info("################################")
+    app.logger.info(f"Recent items: {recent_items}")
     return render_template('home.html', closest_items=closest_items, recent_items=recent_items)
 
-@app.route('/item_page/<int:item_id>', methods=['GET'])
+@app.route('/item_page/<int:item_id>', methods=['GET']) # TODO: Move 
 def item_page(item_id):
-    try:
-        conn = sqlite3.connect(DATABASE)
-        c = conn.cursor()
-        c.execute(
-            "SELECT id, name, date_bought, '' || thumbnail, warranty_expiration_date "
-            "FROM items "
-            "WHERE id = ?",
-            (item_id,)
-        )
-        item = c.fetchone()
-        if item:
-            expiration_date = datetime.strptime(item[4], "%Y-%m-%d").date()
-            buying_date = datetime.strptime(item[2], "%Y-%m-%d").date()
+    item = get_item_by_id(item_id)
+    if item:
+        expiration_date = datetime.strptime(item[5], "%Y-%m-%d").date()
+        buying_date = datetime.strptime(item[3], "%Y-%m-%d").date()
 
-            days_to_expiration = days_until_expiration(expiration_date)
-            total_warranty_days = (expiration_date - buying_date).days
+        days_to_expiration = days_until_expiration(expiration_date)
+        total_warranty_days = (expiration_date - buying_date).days
 
-            progress_width = (days_to_expiration / total_warranty_days) * 100
-
-            thumbnail_file = os.path.basename(item[3])
-            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
-            return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
+        progress_width = (days_to_expiration / total_warranty_days) * 100
         
-        else:
-            return "Item not found", 404
+        if item[4]:
+            thumbnail_file = os.path.basename(item[4])
+            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
+        else: 
+            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', 'default_product.png')
+        
+        return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
+        
+    else:
+        return "Item not found", 404
     
-    except sqlite3.Error as e:
-        app.logger.info("SQLite error:", e)
-    
-    finally:
-        conn.close()
-
 @app.route('/add', methods=['GET', 'POST'])
 def add_item_route():
     if request.method == 'POST':
@@ -204,26 +237,58 @@ def add_item_route():
         
         thumbnail = request.files.get('thumbnail')
         thumbnail_path = None
+        thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
+
         if thumbnail:
             random_filename = str(uuid.uuid4()) + os.path.splitext(thumbnail.filename)[1]
-            thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
             os.makedirs(thumbnail_dir, exist_ok=True) 
             thumbnail_path = os.path.join(thumbnail_dir, random_filename)
             thumbnail.save(thumbnail_path)
-            save_resize_thumbnail(thumbnail_path, 95)
+            save_resize_thumbnail(thumbnail_path, 100)
 
-        add_item(name, warranty_dur, date_bought, thumbnail_path, warranty_expiration_date)
+        else: 
+            thumbnail_path = os.path.join(thumbnail_dir, 'default_product.png')
+            save_resize_thumbnail(thumbnail_path, 100)
+            
+        thumbnail_path = thumbnail_path.replace(os.sep, '/')
+        add_item_database(name, warranty_dur, date_bought, thumbnail_path, warranty_expiration_date)
         return redirect('/')
     return render_template('add_item.html')
+
+@app.route('/update/<int:item_id>', methods=['GET', 'POST'])
+def update_item_route(item_id):
+    item = get_item_by_id(item_id)
+    if item:
+        if request.method == 'POST':
+            name = request.form['name']
+            warranty_dur = int(request.form['warranty_dur'])
+            date_bought = request.form['date_bought']
+            warranty_expiration_date = calculate_expiration_date(warranty_dur)
+
+            thumbnail_img = request.files.get('thumbnail').close
+            thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
+            thumbnail_img = None
+
+            if thumbnail_img:
+                random_filename = str(uuid.uuid4())+'.png'
+                os.makedirs(thumbnail_dir, exist_ok=True) 
+                thumbnail_path = os.path.join(thumbnail_dir, random_filename)
+                
+            else:
+                thumbnail_path = os.path.join(thumbnail_dir, 'default_product.png')
+            
+            thumbnail_path = thumbnail_path.replace(os.sep, '/')
+            save_resize_thumbnail(thumbnail_path, 100)
+            update_item_database(item_id, name, warranty_dur, date_bought, thumbnail_path, warranty_expiration_date)
+            return redirect('/')
+        
+        item = get_item_by_id(item_id)
+        return render_template('update_item.html', item=item)
 
 @app.route('/full_list', methods=['GET'])
 def full_list():
     items_list = get_all_items()
-    items_dict = [{'id': item[0], 'name': item[1], 'warranty_dur': item[2], 'date_bought': item[3], 'thumbnail': item[4], 'timestamp': item[5]} for item in items_list]
-    for item in items_dict:
-        if item['thumbnail']:
-            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
-
+    items_dict = list_to_dict(items_list=items_list)
     return render_template('full_list.html', items=items_dict)
 
 
@@ -241,25 +306,14 @@ def delete_all_items_route():
 @app.route('/closest_to_expiry')
 def closest_to_expiry():
     items_list =  get_closest_expiration() 
-    items_dict = [{'id': item[0], 'name': item[1], 'date_bought': item[2], 'thumbnail': item[3], 'warranty_expiration_date': item[4]} for item in items_list]
-    for item in items_dict:
-        if item['thumbnail']:
-            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
-
+    items_dict = list_to_dict(items_list=items_list)
     return render_template('closest_to_expiry.html', closest_items=items_dict)
 
 @app.route('/recently_added')
 def recently_added():
     items_list = get_recent_items()
-    items_dict = [{'id': item[0], 'name': item[1], 'date_bought': item[2], 'thumbnail': item[3], 'warranty_expiration_date': item[4]} for item in items_list]
-    for item in items_dict:
-        if item['thumbnail']:
-            item['thumbnail'] = item['thumbnail'].replace(os.sep, '/')
-
+    items_dict = list_to_dict(items_list=items_list)
     return render_template('recently_added.html', recent_items=items_dict)
-
-
-    
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container my-5" data-bs-theme="dark">
+    <h1 class="mb-5">Update Item</h1>
+    <form action="{{ url_for('update_item_route', item_id=item[0]) }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Item Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ item[1] }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="warranty_dur" class="form-label">Warranty Duration (months)</label>
+            <input type="number" class="form-control" id="warranty_dur" name="warranty_dur" value="{{ item[2] }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="date_bought" class="form-label">Date Bought</label>
+            <input type="date" class="form-control" id="date_bought" name="date_bought" value="{{ item[3] }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="thumbnail" class="form-label">Thumbnail</label>
+            <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+        </div>
+
+        <div class="mb-3">
+            {% if item[4] %}
+            <img src="{{ url_for('static', filename=item[4][7:]) }}" alt="{{ item[4] }}" width="150" height="150">
+            {% endif %}        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Back to Home</a>
+</div>
+{% endblock %}
+
+
+
+
