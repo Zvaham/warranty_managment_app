@@ -1,1 +1,4 @@
 /.venv
+/routes.py
+/util.py
+/database.py

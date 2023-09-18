@@ -10,11 +10,11 @@ from PIL import Image
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
-db = 'list.db'
+DATABASE = 'list.db'
 
 def create_database():
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS items
                     (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +33,7 @@ def create_database():
 
 def get_item_by_id(item_id):
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("SELECT * FROM items WHERE id=?", (item_id,))
         item = c.fetchone()
@@ -49,7 +49,7 @@ def get_item_by_id(item_id):
 
 def get_all_items():
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("SELECT * FROM items")
         items = c.fetchall()
@@ -64,7 +64,7 @@ def get_all_items():
 
 def get_closest_expiration():
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         current_date = datetime.now().date()
         c.execute(
@@ -86,7 +86,7 @@ def get_closest_expiration():
     
 def get_recent_items():
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute(
             "SELECT id, name, warranty_dur, date_bought, '' || thumbnail, strftime('%Y-%m-%d', date_bought) as formatted_date "
@@ -105,7 +105,7 @@ def get_recent_items():
 
 def add_item_database(name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("INSERT INTO items (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date) VALUES (?, ?, ?, ?, ?)",
                 (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date))
@@ -120,7 +120,7 @@ def add_item_database(name, warranty_dur, date_bought, thumbnail, warranty_expir
 
 def update_item_database(item_id, name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute(
             "UPDATE items SET name=?, warranty_dur=?, date_bought=?, thumbnail=?, warranty_expiration_date=? WHERE id=?",
@@ -138,7 +138,7 @@ def update_item_database(item_id, name, warranty_dur, date_bought, thumbnail, wa
 
 def delete_item_database(item_id):
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("DELETE FROM items WHERE id=?", (item_id,))
         conn.commit()
@@ -154,7 +154,7 @@ def delete_item_database(item_id):
 
 def delete_all_items():
     try:
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("DELETE FROM items")
         conn.commit()
@@ -195,7 +195,7 @@ def list_to_dict(items_list):
 @app.route('/', methods=['GET'])
 @app.route('/home', methods=['GET'])
 def home():
-    if not os.path.exists(db):
+    if not os.path.exists(DATABASE):
         create_database()
     closest_items = list_to_dict(get_closest_expiration())
     recent_items = list_to_dict(get_recent_items())
