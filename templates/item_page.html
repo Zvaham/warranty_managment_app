@@ -1,33 +1,41 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
 <body>
-    <div class="container my-5">
-        <h1 class="mb-5">Item Details</h1>
-        <div class="section">
-            <h2>Item Name: {{ item[1] }}</h2>
-            <p>Warranty Expiration Date: {{ item[4] }}</p>
-            <p>Date Bought: {{ item[2] }}</p>
+    <div class="container my-5" data-bs-theme="dark">
+        <h1 class="mb-5 text-center" style="color: aliceblue;">Item Details</h1>
+        <div class="section card border-secondary">
+            <h2 class="text-center">Item Name: {{ item[1] }}</h2>
+            <p class="text-center text-info" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Warranty Expiration Date: {{ item[5] }}</p>
+            <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Date Bought: {{ item[3] }}</p>
             
             {% if days_to_expiration >= 0 %}
-                <p>Days until warranty expiration: {{ days_to_expiration }}</p>
-                <div class="progress">
-                    <div class="progress-bar custom-progress" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
+                <p class="text-center" >Days until warranty expiration: {{ days_to_expiration }}</p>
+               
+                <div class="text-center">
+                    <div class="progress m-lg-auto" style="max-width: 80%;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
+                    </div>
                 </div>
-                
-
+  
             {% else %}
-                <p>Warranty Expired</p>
-
+                <p class="text-center">Warranty Expired</p>
             {% endif %}
 
-            <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="150" height="150">
-            
+            <div class="text-center mb-5 mt-5">
+                <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="150" height="150">
+            </div>
         </div>
-        <a href="{{ url_for('update_item_route', item_id=item[0]) }}"  class="btn btn-dark">Edit Item</a>
-        <a href="{{ url_for('home')}}" class="btn btn-dark"> Back </a>
+
+        <div class="text-center custom-margin">
+        <a href="{{ url_for('update_item_route', item_id=item[0]) }}" class="btn btn-dark">Edit Item</a>
+        </div>
+        
+        <div class="text-center custom-margin">
+            <a href="{{ url_for('home') }}" class="btn btn-dark ">Back</a>
+        </div>
     </div>
 </body>
 
 {% endblock %}
+
