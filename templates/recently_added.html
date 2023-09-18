@@ -4,16 +4,17 @@
 
 <body>
     <div class="container my-5" data-bs-theme="dark">
-        <h1 class="mb-5 text-center" style="color: aliceblue;">Recently Added Items</h1>
+        <h1 class="mb-5 text-center" style="color: whitesmoke;">Recently Added Items</h1>
         <div class="section card border-secondary mb-3">
             <table class="table table-striped ">
-                <thead class="table-primary">
+                <thead class="table-primary text-center">
                     <tr >
-                        <th class="fw-bold text-center">Thumbnail</th>
-                        <th class="fw-bold text-center">Name</th>
-                        <th class="fw-bold text-center">Date Added</th>
+                        <th class="fw-bold">Thumbnail</th>
+                        <th class="fw-bold">Name</th>
+                        <th class="fw-bold">Date Added</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for item in recent_items %}
                         <tr>

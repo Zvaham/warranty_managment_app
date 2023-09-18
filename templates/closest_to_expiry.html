@@ -4,7 +4,7 @@
 
 <body>
     <div class="container my-5" data-bs-theme="dark">
-        <h1 class="mb-5 text-center" style="color: aliceblue;">Closest to Expiry</h1>
+        <h1 class="mb-5 text-center" style="color: whitesmoke;">Closest to Expiry</h1>
         <div class="section card border-secondary mb-3">
             <table class="table table-striped">
                 <thead class="table-primary">
@@ -25,18 +25,19 @@
                                 </a>
                             </td>
                             <td class="text-center">
-                                <a href="{{ url_for('item_page', item_id=item.id) }}" class="text-secondary text-center" style="font-size: 24px;">
-                                    {{ item.name }}
-                                </a>
+                                <h5 class="text-secondary" style="font-size: 24px;">{{ item.name }}</h5>
                             </td>
-                            <td class="text-secondary text-center" style="font-size: 18px;">{{ item.date_bought }}</td>
+
+                            <td class="text-secondary text-center" >
+                                <h5 class="text-secondary" style="font-size: 18px;">{{ item.date_bought }}</h5>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         <div class="text-center">
-            <a href="{{ url_for('home') }}" class="btn btn-dark">Back to Home</a>
+            <a href="{{ url_for('home') }}" class="btn btn-dark">Back</a>
         </div>
     </div>
 </body>
