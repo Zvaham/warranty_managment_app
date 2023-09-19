@@ -10,12 +10,20 @@
             <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Date Bought: {{ item[3] }}</p>
             
             {% if days_to_expiration >= 0 %}
-                <p class="text-center" >Days until warranty expiration: {{ days_to_expiration }}</p>
-               
-                <div class="text-center">
+            
+            <div class="text-center">
+                    <div class="text-center">
+                        <p>Days until warranty expiration: {{ days_to_expiration }}</p>
+                    </div>
+                    
                     <div class="progress m-lg-auto" style="max-width: 80%;">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
                     </div>
+                    
+                    <div class="text-center custom-margin">
+                        <a href="{{ url_for('add_calendar_reminder', item_id=item[0]) }}" class="btn btn-dark">Add Expiration Reminder</a>
+                    </div>
+
                 </div>
   
             {% else %}

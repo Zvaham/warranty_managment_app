@@ -1,16 +1,15 @@
 from flask import Flask, render_template, request, redirect
-from datetime import datetime
+import datetime
 import os
 import uuid
 from database import *
 from utils import *
+from cal_utils import *
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
 DATABASE = 'list.db'
-
-
 
 
 @app.route('/', methods=['GET'])
@@ -23,29 +22,7 @@ def home():
 
     return render_template('home.html', closest_items=closest_items, recent_items=recent_items)
 
-@app.route('/item_page/<int:item_id>', methods=['GET'])
-def item_page(item_id):
-    item = get_item_by_id(item_id)
-    if item:
-        expiration_date = datetime.strptime(item[5], "%Y-%m-%d").date()
-        buying_date = datetime.strptime(item[3], "%Y-%m-%d").date()
 
-        days_to_expiration = days_until_expiration(expiration_date)
-        total_warranty_days = (expiration_date - buying_date).days
-
-        progress_width = (days_to_expiration / total_warranty_days) * 100
-        
-        if item[4]:
-            thumbnail_file = os.path.basename(item[4])
-            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
-        else: 
-            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', 'default_product.png')
-        
-        return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
-        
-    else:
-        return "Item not found", 404
-    
 @app.route('/add', methods=['GET', 'POST'])
 def add_item_route():
     if request.method == 'POST':
@@ -73,6 +50,31 @@ def add_item_route():
         add_item_database(name, warranty_dur, date_bought, thumbnail_path, warranty_expiration_date)
         return redirect('/')
     return render_template('add_item.html')
+
+
+@app.route('/item_page/<int:item_id>', methods=['GET'])
+def item_page(item_id):
+    item = get_item_by_id(item_id)
+    if item:
+        expiration_date = datetime.datetime.strptime(item[5], "%Y-%m-%d").date()
+        buying_date = datetime.datetime.strptime(item[3], "%Y-%m-%d").date()
+
+        days_to_expiration = days_until_expiration(expiration_date)
+        total_warranty_days = (expiration_date - buying_date).days
+
+        progress_width = (days_to_expiration / total_warranty_days) * 100
+        
+        if item[4]:
+            thumbnail_file = os.path.basename(item[4])
+            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', thumbnail_file)
+        else: 
+            thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', 'default_product.png')
+        
+        return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
+        
+    else:
+        return "Item not found", 404
+    
 
 @app.route('/update/<int:item_id>', methods=['GET', 'POST'])
 def update_item_route(item_id):
@@ -104,12 +106,6 @@ def update_item_route(item_id):
         item = get_item_by_id(item_id)
         return render_template('update_item.html', item=item)
 
-@app.route('/full_list', methods=['GET'])
-def full_list():
-    items_list = get_all_items()
-    items_dict = list_to_dict(items_list=items_list)
-    return render_template('full_list.html', items=items_dict)
-
 
 @app.route('/delete/<int:item_id>', methods=['POST', 'GET'])
 def delete_item_route(item_id):
@@ -122,6 +118,14 @@ def delete_all_items_route():
     delete_all_items()
     return redirect('/')
 
+
+@app.route('/full_list', methods=['GET'])
+def full_list():
+    items_list = get_all_items()
+    items_dict = list_to_dict(items_list=items_list)
+    return render_template('full_list.html', items=items_dict)
+
+
 @app.route('/closest_to_expiry')
 def closest_to_expiry():
     items_list =  get_closest_expiration() 
@@ -133,6 +137,39 @@ def recently_added():
     items_list = get_recent_items()
     items_dict = list_to_dict(items_list=items_list)
     return render_template('recently_added.html', recent_items=items_dict)
+
+
+@app.route('/add_calendar_reminder/<int:item_id>', methods=['GET', 'POST'])
+def add_calendar_reminder(item_id):
+    item = get_item_by_id(item_id)
+
+    if item:
+    if request.method == 'POST':
+        name = request.form['name']
+        warranty_dur = int(request.form['warranty_dur'])
+        date_bought = request.form['date_bought']
+        warranty_expiration_date = calculate_expiration_date(warranty_dur)
+        
+        thumbnail_img = request.files.get('thumbnail').close
+
+
+        # TODO: finish html page.
+        # TODO: use above items to create calendar reminder.
+        # TODO: add a confirmation modult to the form
+
+        creds = verify_token(credentials_source)
+        summary = "Warranty Checkout2"
+        description = "Warranty will expire in [x] days at [expiration_date]. We recommend to check [device name] for issues and use warranty if necessary2."
+        start_date_input = "2023-09-20"
+        end_date_input = "2023-09-20"
+        
+        params = EventParams(summary=summary, start_date_input=start_date_input, end_date_input=end_date_input, description=description)
+                
+        create_events(params, creds)
+    
+    return render_template('add_calendar_reminder.html',  item=item)    
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
