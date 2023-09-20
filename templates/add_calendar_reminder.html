@@ -1,26 +1,59 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container my-5" data-bs-theme="dark">
+<div class="container my-5 text-center" data-bs-theme="dark">
     <h1 class="mb-5">Warranty Expiration Reminder</h1>
-    <div class="card border-secondary mb-3">
-        <form action="{{ url_for('add_calendar_reminder', item_id=item[0]) }}" method="POST" enctype="multipart/form-data">
-            <div class="mb-3 custom-margin">
-                <label for="name" class="form-label" style='color: whitesmoke;'>Name:</label>
-            </div>
+    <div class="card border-secondary mb-3 text-center">
+        <div class="d-flex justify-content-center">
+            
+            <form action="{{ url_for('add_calendar_reminder', item_id=item[0]) }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3 custom-margin d-flex justify-content-between">
+                    <div class="w-45">
+                        <label for="reminder_number" class="form-label" style='color: whitesmoke;'>Time Before Expiry:</label>
+                        <input type="number" class="bg-body-secondary mb-3 form-control" id="reminder_number" name="reminder_number" required>
+                    </div>
 
-            <div class="mb-3 custom-margin">
-                <label for="name" class="form-label" style='color: whitesmoke;'>Name:</label>
-                <input type="text" class="bg-body-secondary mb-3 form-control" id="name" name="name" required>
-            </div>
-        </form>
-
-        <div class="mb-3 custom-margin text-center">
-            <button type="submit" class="btn btn-primary">Update</button>
+                    <div class="w-45">
+                        <label for="reminder_type" class="form-label" style='color: whitesmoke;'>Duration Type:</label>
+                        <select class="bg-body-secondary mb-3 form-select" id="reminder_type" name="reminder_type" required>
+                            <option value="days">Days</option>
+                            <option value="months">Months</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="mb-3 custom-margin">
+                    <input type="checkbox" class="form-check-input" id="additional_reminder" name="additional_reminder">
+                    <label class="form-check-label" for="additional_reminder">Add additional event on expiry</label>
+                </div>
+            
+                <div class="mb-3 custom-margin text-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Create Reminder</button>
+                </div>
+            </form>
+            
         </div>
-    </div>
+      </div>
     <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Back to Home</a>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Event Created Successfully</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        The event has been created. You can access it by clicking the following link:
+        <a href="cal_event_link" class="btn btn-primary">View Event</a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
-
-

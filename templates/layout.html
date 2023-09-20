@@ -2,49 +2,43 @@
 <html>
 <head>
     <title>Warranty Tracking App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRkNY5Fz1bs1ZHmF8F5L+aWz5w5/J5B4/p5F5L5xp5F5w5s5" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha384-N7Czi03zzuX6f/6F7dBOy1Ff+HaRcCA4p3F3Bn/k3kxsZsP5eVvRYLVb5K5S6zr5T" crossorigin="anonymous"></script>
+    
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-        <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarColor02">
-            <ul class="navbar-nav me-auto">
-
-              <li class="nav-item">
-                <a class="nav-link active" href="home">Dashboard
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="add">Add New Item</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="recently_added">Recently Added Items</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="closest_to_expiry">Items Closest to Expiration</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="full_list">View Full List</a>
-              </li>
-            </ul>
+              <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                      <a class="nav-link active" href="home">Dashboard
+                          <span class="visually-hidden">(current)</span>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('add_item_route') }}">Add New Item</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('recently_added_route') }}">Recently Added Items</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('closest_expiry_route') }}">Items Closest to Expiration</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('full_list_route') }}">View Full List</a>
+                  </li>
+              </ul>
           </div>
-        </div>
-      </nav>
-      
-    <div class="main-content" data-bs-theme="dark">
-        {% block content %}{% endblock %}
-    </div>
+      </div>
+  </nav>
 
+  <div class="main-content" data-bs-theme="dark">
+      {% block content %}{% endblock %}
+  </div>
 </body>
 </html>
 

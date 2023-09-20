@@ -4,9 +4,14 @@ from dateutil.relativedelta import relativedelta
 from PIL import Image
 
 
-def calculate_expiration_date(warranty_dur):
+def calculate_expiration_date(warranty_dur, duration_type):
     current_date = datetime.now()
-    future_date = (current_date + relativedelta(months=warranty_dur)).date()
+    if duration_type == "days":
+        future_date = (current_date + relativedelta(days=warranty_dur)).date()
+    elif duration_type == "months":
+        future_date = (current_date + relativedelta(months=warranty_dur)).date()
+    else:
+        future_date = None
     return future_date
 
 def days_until_expiration(future_date):

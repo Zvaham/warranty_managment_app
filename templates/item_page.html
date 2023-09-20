@@ -1,49 +1,42 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<body>
-    <div class="container my-5" data-bs-theme="dark">
-        <h1 class="mb-5 text-center" style="color: aliceblue;">Item Details</h1>
-        <div class="section card border-secondary">
-            <h2 class="text-center">Item Name: {{ item[1] }}</h2>
-            <p class="text-center text-info" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Warranty Expiration Date: {{ item[5] }}</p>
-            <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Date Bought: {{ item[3] }}</p>
-            
-            {% if days_to_expiration >= 0 %}
-            
+<div class="container my-5">
+    <h1 class="mb-5 text-center" style="color: var(--text-color);">Item Details</h1>
+    <div class="section card" style="background-color: var(--primary-color); border: 1px solid var(--secondary-color); box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+        <h2 class="text-center" style="color: var(--text-color);">Item Name: {{ item[1] }}</h2>
+        <p class="text-center text-info" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-color);">Warranty Expiration Date: {{ item[5] }}</p>
+        <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-color);">Date Bought: {{ item[3] }}</p>
+        
+        {% if days_to_expiration >= 0 %}
+        <div class="text-center">
             <div class="text-center">
-                    <div class="text-center">
-                        <p>Days until warranty expiration: {{ days_to_expiration }}</p>
-                    </div>
-                    
-                    <div class="progress m-lg-auto" style="max-width: 80%;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
-                    </div>
-                    
-                    <div class="text-center custom-margin">
-                        <a href="{{ url_for('add_calendar_reminder', item_id=item[0]) }}" class="btn btn-dark">Add Expiration Reminder</a>
-                    </div>
-
-                </div>
-  
-            {% else %}
-                <p class="text-center">Warranty Expired</p>
-            {% endif %}
-
-            <div class="text-center mb-5 mt-5">
-                <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="150" height="150">
+                <p style="color: var(--text-color);">Days until warranty expiration: {{ days_to_expiration }}</p>
+            </div>
+            
+            <div class="progress m-lg-auto" style="max-width: 80%;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ progress_width }}%;" aria-valuenow="{{ days_to_expiration }}" aria-valuemin="0" aria-valuemax="{{ total_warranty_days }}"></div>
+            </div>
+            
+            <div class="text-center custom-margin">
+                <a href="{{ url_for('add_calendar_reminder', item_id=item[0]) }}" class="btn btn-primary">Add Expiration Reminder</a>
             </div>
         </div>
+        {% else %}
+        <p class="text-center" style="color: var(--text-color);">Warranty Expired</p>
+        {% endif %}
 
-        <div class="text-center custom-margin">
-        <a href="{{ url_for('update_item_route', item_id=item[0]) }}" class="btn btn-dark">Edit Item</a>
-        </div>
-        
-        <div class="text-center custom-margin">
-            <a href="{{ url_for('home') }}" class="btn btn-dark ">Back</a>
+        <div class="text-center mb-5 mt-5">
+            <img src="{{ url_for('static', filename=file_path) }}" alt="Thumbnail" width="150" height="150">
         </div>
     </div>
-</body>
 
+    <div class="text-center custom-margin">
+        <a href="{{ url_for('update_item_route', item_id=item[0]) }}" class="btn btn-primary">Edit Item</a>
+    </div>
+    
+    <div class="text-center custom-margin">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
 {% endblock %}
-

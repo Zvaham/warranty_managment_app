@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import datetime
+from dateutil.relativedelta import relativedelta
 import os
 import uuid
 from database import *
@@ -101,7 +102,7 @@ def update_item_route(item_id):
             thumbnail_path = thumbnail_path.replace(os.sep, '/')
             save_resize_thumbnail(thumbnail_path, 100)
             update_item_database(item_id, name, warranty_dur, date_bought, thumbnail_path, warranty_expiration_date)
-            return redirect('/')
+            return redirect(url_for('item_page', item_id=item_id))
         
         item = get_item_by_id(item_id)
         return render_template('update_item.html', item=item)
@@ -120,54 +121,63 @@ def delete_all_items_route():
 
 
 @app.route('/full_list', methods=['GET'])
-def full_list():
+def full_list_route():
     items_list = get_all_items()
     items_dict = list_to_dict(items_list=items_list)
     return render_template('full_list.html', items=items_dict)
 
 
-@app.route('/closest_to_expiry')
-def closest_to_expiry():
+@app.route('/closest_expiry')
+def closest_expiry_route():
     items_list =  get_closest_expiration() 
     items_dict = list_to_dict(items_list=items_list)
     return render_template('closest_to_expiry.html', closest_items=items_dict)
 
 @app.route('/recently_added')
-def recently_added():
+def recently_added_route():
     items_list = get_recent_items()
     items_dict = list_to_dict(items_list=items_list)
     return render_template('recently_added.html', recent_items=items_dict)
 
 
 @app.route('/add_calendar_reminder/<int:item_id>', methods=['GET', 'POST'])
-def add_calendar_reminder(item_id):
+def add_calendar_reminder_route(item_id):
     item = get_item_by_id(item_id)
 
     if item:
-    if request.method == 'POST':
-        name = request.form['name']
-        warranty_dur = int(request.form['warranty_dur'])
-        date_bought = request.form['date_bought']
-        warranty_expiration_date = calculate_expiration_date(warranty_dur)
-        
-        thumbnail_img = request.files.get('thumbnail').close
+        if request.method == 'POST':
+            reminder_number = int(request.form['reminder_number'])
+            reminder_type = request.form['reminder_type']
+            additional_reminder = 'additional_reminder' in request.form
 
+            warranty_expiration_date = datetime.datetime.strptime(item[5], '%Y-%m-%d').date()
 
-        # TODO: finish html page.
-        # TODO: use above items to create calendar reminder.
-        # TODO: add a confirmation modult to the form
+            if reminder_type == "days":
+                reminder_date = warranty_expiration_date - relativedelta(days=reminder_number)
+            elif reminder_type == "months":
+                reminder_date = warranty_expiration_date - relativedelta(months=reminder_number)
+            else:
+                reminder_date = None 
 
-        creds = verify_token(credentials_source)
-        summary = "Warranty Checkout2"
-        description = "Warranty will expire in [x] days at [expiration_date]. We recommend to check [device name] for issues and use warranty if necessary2."
-        start_date_input = "2023-09-20"
-        end_date_input = "2023-09-20"
-        
-        params = EventParams(summary=summary, start_date_input=start_date_input, end_date_input=end_date_input, description=description)
-                
-        create_events(params, creds)
-    
-    return render_template('add_calendar_reminder.html',  item=item)    
+            print(f"Warranty Expiration Date: {warranty_expiration_date}")
+            print(f"Reminder Date: {reminder_date}")
+            print(f"Additional Event: {additional_reminder}")
+
+            creds = verify_token(credentials_source)
+            summary = f"Warranty Reminder For {item[1]}"
+            description = f"""Warranty for iten: {item[1]} will expire in {reminder_number} {reminder_type} at {warranty_expiration_date}. 
+            We recommend to check the device for issues and use the warranty if necessary!."""
+            
+            params = EventParams(summary=summary, start_date_input=reminder_date, end_date_input=reminder_date, description=description)
+
+            creds = verify_token(credentials_source)
+            event = create_events(params, creds)
+            return redirect(url_for('item_page', item_id=item_id, cal_event_link=event['htmlLink']))
+    else:
+        return "Item not found", 404
+
+    return render_template('add_calendar_reminder.html', item=item)
+
 
 
 

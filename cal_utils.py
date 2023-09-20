@@ -70,9 +70,9 @@ def create_events(event_params, creds):
     event_body = event_parser(params=event_params)
     service = build('calendar', 'v3', credentials=creds)
     event = service.events().insert(calendarId='primary', body=event_body).execute()
-    event_return = (event, print('Event created: %s' % (event.get('htmlLink'))))
-
-    return event_return
+    print('Event created: %s' % (event.get('htmlLink')))
+    
+    return event
 
 
 def event_parser(params: EventParams) -> dict:
