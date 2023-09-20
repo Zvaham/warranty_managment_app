@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container my-5" data-bs-theme="dark">
-    <h1 class="mb-5 text-center custom-margin" style="color: aliceblue;">Add Item</h1>
+<div class="container my-5">
+    <h1 class="mb-5 text-center custom-margin" style="color: rgb(56, 56, 56);">Add Item</h1>
     <div class="card border-secondary mb-3">
         <div class="section">
             <form action="{{ url_for('add_item_route') }}" method="POST" enctype="multipart/form-data">
