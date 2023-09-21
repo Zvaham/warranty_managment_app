@@ -16,8 +16,7 @@
 
 /* General Styles */
 body {
-  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-  background-attachment: fixed;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color)) fixed;
   color: var(--dark-color);
   font-family: Arial, sans-serif;
 }
@@ -43,7 +42,6 @@ header, footer {
 }
 
 
-
 /* List Styles */
 .list-group {
   font-size: 1rem;
@@ -54,7 +52,6 @@ header, footer {
   list-style: none;
   padding: 5px;
   color: #272727;
-
 }
 
 .horizontal-list li {
@@ -77,20 +74,20 @@ header, footer {
   width: 100%; /* Adjust the card width as needed */
   margin: 2%; /* Add spacing between cards */
   border: 1px solid var(--secondary-color);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px); /* Add blur effect */
 }
 
 .new-card-header {
   background-color: rgba(247, 247, 247, 0); /* 40% transparent background color */
-  color: var(--text-color);
+  color: var(--black-color);
   padding: 5px;
   text-align: center;
   backdrop-filter: blur(0px); /* Add blur effect */
 }
 
 .card-body {
-  color: var(--text-color);
+  color: var(--black-color);
   padding: 15px; /* Adjust the padding as needed */
   text-align: left;
 }
@@ -221,7 +218,6 @@ a:hover {
   list-style: none;
   padding: 5px;
   color: #272727;
-
 }
 
 .horizontal-list li {

@@ -1,7 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
-import datetime
-from dateutil.relativedelta import relativedelta
-import os
+from flask import Flask, render_template, request, redirect, url_for, current_app
 import uuid
 from database import *
 from utils import *
@@ -9,8 +6,6 @@ from cal_utils import *
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
-
-DATABASE = 'list.db'
 
 
 @app.route('/', methods=['GET'])
@@ -30,10 +25,9 @@ def add_item_route():
         name = request.form['name']
         warranty_dur = int(request.form['warranty_dur'])
         date_bought = request.form['date_bought']
-        warranty_expiration_date = calculate_expiration_date(warranty_dur)
-        
+        warranty_expiration_date = calculate_expiration_date(warranty_dur=warranty_dur, duration_type='months')
+
         thumbnail = request.files.get('thumbnail')
-        thumbnail_path = None
         thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
 
         if thumbnail:
@@ -71,7 +65,8 @@ def item_page(item_id):
         else: 
             thumbnail_path = os.path.join('uploads/' 'products_thumbnails/', 'default_product.png')
         
-        return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration, progress_width=progress_width)
+        return render_template('item_page.html', item=item, file_path=thumbnail_path, days_to_expiration=days_to_expiration,
+                               progress_width=progress_width)
         
     else:
         return "Item not found", 404
@@ -85,13 +80,11 @@ def update_item_route(item_id):
             name = request.form['name']
             warranty_dur = int(request.form['warranty_dur'])
             date_bought = request.form['date_bought']
-            warranty_expiration_date = calculate_expiration_date(warranty_dur)
+            warranty_expiration_date = calculate_expiration_date(warranty_dur=warranty_dur, duration_type='months')
 
-            thumbnail_img = request.files.get('thumbnail').close
             thumbnail_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'products_thumbnails')
-            thumbnail_img = None
 
-            if thumbnail_img:
+            if request.files.get('thumbnail').close:
                 random_filename = str(uuid.uuid4())+'.png'
                 os.makedirs(thumbnail_dir, exist_ok=True) 
                 thumbnail_path = os.path.join(thumbnail_dir, random_filename)
@@ -129,9 +122,10 @@ def full_list_route():
 
 @app.route('/closest_expiry')
 def closest_expiry_route():
-    items_list =  get_closest_expiration() 
+    items_list = get_closest_expiration()
     items_dict = list_to_dict(items_list=items_list)
     return render_template('closest_to_expiry.html', closest_items=items_dict)
+
 
 @app.route('/recently_added')
 def recently_added_route():
@@ -163,22 +157,19 @@ def add_calendar_reminder_route(item_id):
             print(f"Reminder Date: {reminder_date}")
             print(f"Additional Event: {additional_reminder}")
 
-            creds = verify_token(credentials_source)
             summary = f"Warranty Reminder For {item[1]}"
-            description = f"""Warranty for iten: {item[1]} will expire in {reminder_number} {reminder_type} at {warranty_expiration_date}. 
+            description = f"""Warranty for item: {item[1]} will expire in {reminder_number} {reminder_type} at {warranty_expiration_date}. 
             We recommend to check the device for issues and use the warranty if necessary!."""
             
             params = EventParams(summary=summary, start_date_input=reminder_date, end_date_input=reminder_date, description=description)
 
-            creds = verify_token(credentials_source)
+            creds = verify_token(credentials_source_path)
             event = create_events(params, creds)
             return redirect(url_for('item_page', item_id=item_id, cal_event_link=event['htmlLink']))
     else:
         return "Item not found", 404
 
     return render_template('add_calendar_reminder.html', item=item)
-
-
 
 
 if __name__ == '__main__':

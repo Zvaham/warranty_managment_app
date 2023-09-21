@@ -1,16 +1,14 @@
 import os.path
 import datetime
-from typing import List, Optional
-from dotenv import load_dotenv
-from dataclasses import dataclass
+from typing import Optional
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
-credentials_source = r'E:\Code\python\cursor-ai-project-flask-app/env_files'
+credentials_source_path = r'E:\Code\python\cursor-ai-project-flask-app/env_files'
+
 
 class EventParams:
     summary: Optional[str] = None
@@ -19,7 +17,6 @@ class EventParams:
     start_date_input: Optional[str] = None
     end_date_input: Optional[str] = None
 
-    
     def __init__(self, summary=None, location=None, description=None, start_date_input=None, end_date_input=None,):
         self.summary = summary
         self.location = location
@@ -47,7 +44,6 @@ def create_token(google_credentials, token_pickle):
 
 
 def verify_token(credentials_source):
-    creds = None
     token_pickle = os.path.join(credentials_source, r'read_calendar_token.pickle')
     google_credentials = os.path.join(credentials_source, r'credentials.json')
     if os.path.exists(token_pickle):
@@ -60,8 +56,8 @@ def verify_token(credentials_source):
 
 def parse_dict_list(dict_list):
     text = ""
-    for dict in dict_list:
-        text += f"* {dict['summary']} - {dict['start']['dateTime']} - {dict['end']['dateTime']}\n"
+    for dict_item in dict_list:
+        text += f"* {dict_item['summary']} - {dict_item['start']['dateTime']} - {dict_item['end']['dateTime']}\n"
 
     return text
 
@@ -112,16 +108,15 @@ def event_parser(params: EventParams) -> dict:
 
 
 def main():
-    creds = verify_token(credentials_source)
+    creds = verify_token(credentials_source_path)
 
     summary = "Warranty Checkout2"
-    description = "Warranty will expire in [x] days at [expiration_date]. We recommend to check [device name] for issues and use warranty if necessary2."
+    description = ("Warranty will expire in [x] days at [expiration_date]. We recommend "
+                   "to check [device name] for issues and use warranty if necessary2.")
     start_date_input = "2023-09-20"
     end_date_input = "2023-09-20"
     
     params = EventParams(summary=summary, start_date_input=start_date_input, end_date_input=end_date_input, description=description)
-    
-    
     create_events(params, creds)
 
 

@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-5 text-center" style="color: var(--text-color);">Item Details</h1>
-    <div class="section card" style="background-color: var(--primary-color); border: 1px solid var(--secondary-color); box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
-        <h2 class="text-center" style="color: var(--text-color);">Item Name: {{ item[1] }}</h2>
-        <p class="text-center text-info" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-color);">Warranty Expiration Date: {{ item[5] }}</p>
-        <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-color);">Date Bought: {{ item[3] }}</p>
+    <h1 class="mb-5 text-center" style="color: var(--black-color);">Item Details</h1>
+    <div class="section card" style="background-color: var(--primary-color); border: 1px solid var(--secondary-color); box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <h2 class="text-center" style="color: var(--black-color);">Item Name: {{ item[1] }}</h2>
+        <p class="text-center text-info" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--black-color);">Warranty Expiration Date: {{ item[5] }}</p>
+        <p class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--black-color);">Date Bought: {{ item[3] }}</p>
         
         {% if days_to_expiration >= 0 %}
         <div class="text-center">
             <div class="text-center">
-                <p style="color: var(--text-color);">Days until warranty expiration: {{ days_to_expiration }}</p>
+                <p style="color: var(--black-color);">Days until warranty expiration: {{ days_to_expiration }}</p>
             </div>
             
             <div class="progress m-lg-auto" style="max-width: 80%;">
@@ -23,7 +23,7 @@
             </div>
         </div>
         {% else %}
-        <p class="text-center" style="color: var(--text-color);">Warranty Expired</p>
+        <p class="text-center" style="color: var(--black-color);">Warranty Expired</p>
         {% endif %}
 
         <div class="text-center mb-5 mt-5">

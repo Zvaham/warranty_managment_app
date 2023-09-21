@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="EN">
 <head>
     <title>Warranty Tracking App</title>
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRkNY5Fz1bs1ZHmF8F5L+aWz5w5/J5B4/p5F5L5xp5F5w5s5" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha384-N7Czi03zzuX6f/6F7dBOy1Ff+HaRcCA4p3F3Bn/k3kxsZsP5eVvRYLVb5K5S6zr5T" crossorigin="anonymous"></script>
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRkNY5Fz1bs1ZHmF8F5L+aWz5w5/J5B4/p5F5L5xp5F5w5s5" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+            integrity="sha384-N7Czi03zzuX6f/6F7dBOy1Ff+HaRcCA4p3F3Bn/k3kxsZsP5eVvRYLVb5K5S6zr5T" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -15,7 +18,7 @@
           <div class="collapse navbar-collapse" id="navbarColor02">
               <ul class="navbar-nav me-auto">
                   <li class="nav-item">
-                      <a class="nav-link active" href="home">Dashboard
+                      <a class="nav-link active" href="{{ url_for('home') }}">Dashboard
                           <span class="visually-hidden">(current)</span>
                       </a>
                   </li>

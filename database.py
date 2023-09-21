@@ -1,6 +1,9 @@
 import sqlite3
 from datetime import datetime
-from app import DATABASE, app
+from app import current_app
+
+DATABASE = 'list.db'
+
 
 def create_database():
     try:
@@ -16,10 +19,11 @@ def create_database():
         conn.commit()
 
     except sqlite3.Error as e:
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
 
     finally:
         conn.close()
+
 
 def get_item_by_id(item_id):
     try:
@@ -30,12 +34,13 @@ def get_item_by_id(item_id):
         return item
 
     except sqlite3.Error as e:
-        app.logger.info("SQLite error:", e)
+        current_app.logger.info("SQLite error:", e)
         print("SQLite error:", e)
-        return None 
+        return None
 
     finally:
         conn.close()
+
 
 def get_all_items():
     try:
@@ -46,11 +51,12 @@ def get_all_items():
         return items
 
     except sqlite3.Error as e:
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
         return None
-    
+
     finally:
         conn.close()
+
 
 def get_closest_expiration():
     try:
@@ -67,13 +73,14 @@ def get_closest_expiration():
         )
         items = c.fetchall()
         return items
-    
+
     except sqlite3.Error as e:
-        app.logger.info("SQLite error:", e)
-    
+        current_app.logger.info("SQLite error:", e)
+
     finally:
         conn.close()
-    
+
+
 def get_recent_items():
     try:
         conn = sqlite3.connect(DATABASE)
@@ -86,27 +93,29 @@ def get_recent_items():
         )
         items = c.fetchall()
         return items
-    
+
     except sqlite3.Error as e:
-        app.logger.info("SQLite error:", e)
-    
+        current_app.logger.info("SQLite error:", e)
+
     finally:
         conn.close()
+
 
 def add_item_database(name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
     try:
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute("INSERT INTO items (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date) VALUES (?, ?, ?, ?, ?)",
-                (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date))
+                  (name, warranty_dur, date_bought, thumbnail, warranty_expiration_date))
         conn.commit()
-        
+
     except sqlite3.Error as e:
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
         print("SQLite error:", e)
 
     finally:
         conn.close()
+
 
 def update_item_database(item_id, name, warranty_dur, date_bought, thumbnail, warranty_expiration_date):
     try:
@@ -120,11 +129,12 @@ def update_item_database(item_id, name, warranty_dur, date_bought, thumbnail, wa
         print(f"Updated item with ID {item_id}")
 
     except sqlite3.Error as e:
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
         print("SQLite error:", e)
 
     finally:
         conn.close()
+
 
 def delete_item_database(item_id):
     try:
@@ -136,11 +146,12 @@ def delete_item_database(item_id):
 
     except sqlite3.Error as e:
         conn.rollback()
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
         print("SQLite error:", e)
 
     finally:
         conn.close()
+
 
 def delete_all_items():
     try:
@@ -151,7 +162,7 @@ def delete_all_items():
 
     except sqlite3.Error as e:
         conn.rollback()
-        app.logger.info(f"SQLite error:", e)
+        current_app.logger.info(f"SQLite error:", e)
         print("SQLite error:", e)
 
     finally:
