@@ -169,7 +169,7 @@ def add_calendar_reminder_route(item_id):
     else:
         return "Item not found", 404
 
-    return render_template('add_calendar_reminder.html', item=item)
+    return render_template('add_calendar_reminder.html', item_id=item_id)
 
 
 if __name__ == '__main__':
