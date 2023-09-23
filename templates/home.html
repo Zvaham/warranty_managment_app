@@ -6,8 +6,7 @@
     <div class="container my-5 text-center">
         <h1 class="mb-5">Warranty Tracking App</h1>
     </div>
-    <div class="custom-card custom-margin">
-        <div class="card-container">
+
             <div class="custom-margin text-center">
                 <a href="{{ url_for('add_item_route') }}" type="button" class="custom-button custom-margin">Add New Item</a>
                 <a href="{{ url_for('full_list_route') }}" type="button" class="custom-button custom-margin">View Full List</a>
@@ -38,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="custom-card custom-margin">
+            <div class="custom-card custom-margin ">
 
                 <div class="new-card-header">
                     <h4>Recently Added</h4>
@@ -63,8 +62,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
+    </div>
 {% endblock %}

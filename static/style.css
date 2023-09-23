@@ -1,44 +1,68 @@
 /* Custom Colors */
 :root {
-  --primary-color: #F9F4F5;     /* Main Background Color */
-  --secondary-color: #C8B8DB;   /* Accent Color */
-  --dark-color: #70587C;        /* Dark Color for Texts, Borders */
-  --darker-color: #502F4C;      /* Even Darker Color for Headers, Footers */
-  --black-color: #000000;       /* Black color for High Contrast Texts */
-  --tertiary-color: #8B7699;    /* Tertiary color for extra highlights */
-  --quaternary-color: #E0D5E5;  /* Quaternary color for lighter backgrounds */
-  --light-color: #DCCCE7;       /* Light Color for secondary highlights */
-  --error-color: #FF0000;       /* Error color */
-  --success-color: #4CAF50;     /* Success color */
-  --info-color: #2196F3;        /* Info color */
-  --warning-color: #FF9800;     /* Warning color */
+/* Background and Text Colors */
+--text-color-primary: #333;         /* Dark text for high readability */
+--primary-color: #5b5b5b;           /* Main Background Color, a light neutral */
+--secondary-color: #aa7aea;         /* Accent Color, a bright and saturated color */
+
+/* Dark and Accent Colors */
+--dark-color: #555;                /* Dark Color for Texts, Borders */
+--darker-color: #222;              /* Even Darker Color for Headers, Footers */
+--black-color: #000;               /* Black color for High Contrast Texts */
+--tertiary-color: #6B8E23;         /* Tertiary color for extra highlights, a muted green */
+--quaternary-color: #E6E6E6;       /* Quaternary color for lighter backgrounds, a very light neutral */
+
+/* Semantic Colors */
+--light-color: #CCCCCC;            /* Light Color for secondary highlights */
+--error-color: #FF0000;            /* Error color */
+--success-color: #4CAF50;          /* Success color */
+--info-color: #2196F3;             /* Info color */
+--warning-color: #FF9800;          /* Warning color */
 }
 
 /* General Styles */
 body {
-  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color)) fixed;
-  color: var(--dark-color);
-  font-family: Arial, sans-serif;
+    color: var(--dark-color);
+    position: relative; /* Add relative positioning to the body */
+    font-family: Poppins-Medium, sans-serif;
+    background-image: url('uploads/imgs/topper.png');
+    background-size: 100% auto; /* Cover the entire width and maintain aspect ratio */
+    background-repeat: no-repeat;
+    background-position: center top; /* Center the image horizontally and align it to the top */
+    background-attachment: fixed; /* Keep the background fixed */
+}
+
+/* Create a gradient overlay at the bottom */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Adjust the height to control where the gradient starts */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.88));
+    pointer-events: none; /* Allows interaction with content beneath */
+    z-index: -1; /* Place the gradient below the content */
 }
 
 /* Header and Footer Styles */
 header, footer {
   background-color: var(--darker-color);
-  color: var(--primary-color);
+  color: var(--text-color-primary);
   padding: 10px;
 }
 
 /* Navigation Bar Styles */
 .navbar {
-  background-color: var(--darker-color);
+  background-color: rgba(247, 247, 247, 0.26); /* Adjust the alpha value (0.7) for the desired transparency */
 }
 
 .navbar .nav-link {
-  color: var(--primary-color);
+  color: #6e6e6e;
 }
 
 .navbar .nav-link:hover {
-  color: var(--secondary-color);
+  color: #49324d;
 }
 
 
@@ -93,11 +117,12 @@ header, footer {
 }
 
 .custom-card {
-  margin: 2%; /* Add spacing between cards */
+  margin: 3%;
   background-color: rgba(255, 255, 255, 0.30);
   box-shadow: 7px 5px 3px rgba(77, 77, 77, 0.041);
-  backdrop-filter: blur(0); /* Add blur effect */
-  border-radius: 15px; /* Rounded corners */
+  backdrop-filter: blur(0);
+  border-radius: 15px;
+  height: 300px;
 }
 
 /* Image Styles */
@@ -192,7 +217,7 @@ a:hover {
 /* Custom Button Styles */
 .custom-button {
   background-color: var(--darker-color);
-  color: var(--primary-color);
+  color: var(--quaternary-color);
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -226,5 +251,56 @@ a:hover {
 
 /* Margin Styles */
 .custom-margin {
-  margin: 15px; /* Adjust the margin size as needed */
+  margin: 25px; /* Adjust the margin size as needed */
+}
+
+.box {
+  border-radius: 13px;
+  border: 1px solid transparent;
+  box-shadow: 1px 2px 30px 3px #00000026;
+  border-image: linear-gradient(to bottom, rgb(255, 255, 255), rgba(255, 255, 255, 0)) 1;
+  background: linear-gradient(180deg, rgba(217, 217, 217, 0.4) 0%, rgba(217, 217, 217, 0.7) 100%);
+}
+
+
+/* Target the table itself */
+.table-custom {
+  /* Your custom table styles here */
+  width: 100%; /* Make the table full width, for example */
+  border-collapse: collapse; /* Remove default cell spacing */
+  border: 1px solid #ccc; /* Add a border */
+}
+
+/* Target table headers */
+.table-custom th {
+  /* Your custom header styles here */
+  background-color: rgba(223, 160, 234, 0.2); /* Change header background color */
+  color: #333; /* Change header text color */
+  font-weight: bold; /* Make header text bold */
+  padding: 10px; /* Adjust header cell padding */
+}
+
+/* Target table rows */
+.table-custom tr {
+  /* Your custom row styles here */
+  background-color: #fff; /* Change row background color */
+}
+
+/* Target table cells */
+.table-custom td {
+  /* Your custom cell styles here */
+  padding: 8px; /* Adjust cell padding */
+  border: 1px solid #ccc; /* Add cell borders */
+}
+
+/* Target table hover effect */
+.table-custom tr:hover {
+  /* Your custom hover effect styles here */
+  background-color: #f5f5f5; /* Change row background color on hover */
+}
+
+/* Target table striped rows (if using Bootstrap's striped class) */
+.table-custom .table-striped tbody tr:nth-of-type(odd) {
+  /* Your custom striped row styles here */
+  background-color: #f9f9f9; /* Change striped row background color */
 }
