@@ -12,39 +12,39 @@
                 <a href="{{ url_for('full_list_route') }}" type="button" class="custom-button custom-margin">View Full List</a>
             </div>
 
+
             <div class="custom-card custom-margin">
-                <div class="new-card-header">
+                <div class="new-card-header m-md-3">
                     <h4>Closest Expirations</h4>
                 </div>
 
-                <div class="card-body">
-                    <ul class="horizontal-list m-2">
+                <div class=>
+                    <ul class="horizontal-list">
                         {% for item in closest_items %}
-                            <li>
+                            <li class="text-center">
                                 <a href="{{ url_for('item_page', item_id=item['id']) }}">
                                     <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}">
                                 </a>
-                            </li>
-                            <li>
+
                                 <div>
                                     {{ item['name'] }}
                                     <h6>Warranty Expires on</h6>
                                     {{ item['warranty_expiration_date'] }}
                                 </div>
                             </li>
+
                         {% endfor %}
                     </ul>
                 </div>
             </div>
 
             <div class="custom-card custom-margin ">
-
-                <div class="new-card-header">
+                <div class="new-card-header m-md-4">
                     <h4>Recently Added</h4>
                 </div>
 
-                <div class="card-body">
-                    <ul class="horizontal-list m-2">
+                <div>
+                    <ul class="horizontal-list">
                         {% for item in recent_items %}
                             <li>
                                 <a href="{{ url_for('item_page', item_id=item['id']) }}">

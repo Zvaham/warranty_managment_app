@@ -6,36 +6,38 @@
     <div class="container my-5">
         <h1 class="mb-5 text-center" style="color: rgb(56, 56, 56);">Closest to Expiry</h1>
         <div class="section card border-secondary mb-3">
-            <table class="table table-striped">
-                <thead class="table-info">
-                    <tr>
-                        <th class="fw-bold text-center">Thumbnail</th>
-                        <th class="fw-bold text-center">Name</th>
-                        <th class="fw-bold text-center">Expiry Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in closest_items %}
+            <table class="table-custom ">
+                <thead class="table-custom text-center">
+                    <thead class="table-info">
                         <tr>
-                            <td class="text-center">
-                                <a href="{{ url_for('item_page', item_id=item.id) }}">
-                                    {% if item.thumbnail %}
-                                        <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="100" height="100">
-                                    {% endif %}
-                                </a>
-                            </td>
-                            <td class="text-center">
-                                <h5 class="text-secondary" style="font-size: 24px;">{{ item.name }}</h5>
-                            </td>
-
-                            <td class="text-secondary text-center" >
-                                <h5 class="text-secondary" style="font-size: 18px;">{{ item.date_bought }}</h5>
-                            </td>
+                            <th class="fw-bold text-center">Thumbnail</th>
+                            <th class="fw-bold text-center">Name</th>
+                            <th class="fw-bold text-center">Expiry Date</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
+                    </thead>
+                    <tbody>
+                        {% for item in closest_items %}
+                            <tr>
+                                <td class="text-center">
+                                    <a href="{{ url_for('item_page', item_id=item.id) }}">
+                                        {% if item.thumbnail %}
+                                            <img src="{{ url_for('static', filename=item.thumbnail[7:]) }}" alt="{{ item.name }}" width="100" height="100">
+                                        {% endif %}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="text-secondary" style="font-size: 24px;">{{ item.name }}</h5>
+                                </td>
+
+                                <td class="text-secondary text-center" >
+                                    <h5 class="text-secondary" style="font-size: 18px;">{{ item.date_bought }}</h5>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
+    </div>
         <div class="text-center">
             <a href="{{ url_for('home') }}" class="btn btn-dark">Back</a>
         </div>

@@ -73,13 +73,11 @@ header, footer {
 
 .horizontal-list {
   display: flex;
+  justify-content: space-between; /* Spread items evenly */
   list-style: none;
   padding: 5px;
   color: #272727;
-}
-
-.horizontal-list li {
-  margin-right: 10px; /* Add spacing between items */
+  width: calc(100% - 20px);
 }
 
 /* Margin Styles */
@@ -118,16 +116,17 @@ header, footer {
 
 .custom-card {
   margin: 3%;
-  background-color: rgba(255, 255, 255, 0.30);
-  box-shadow: 7px 5px 3px rgba(77, 77, 77, 0.041);
-  backdrop-filter: blur(0);
-  border-radius: 15px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  box-shadow: 1px 2px 30px 3px #00000026;
+  border-image: linear-gradient(to bottom, rgb(255, 255, 255), rgba(255, 255, 255, 0)) 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.5) 100%);
   height: 300px;
 }
 
 /* Image Styles */
 img {
-  max-width: 100%;
+  max-width: 200%;
   height: auto;
   border-radius: 10px;
 }
