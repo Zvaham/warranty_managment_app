@@ -3,65 +3,59 @@
 {% block content %}
 
 <div class="container my-5">
-    <div class="container my-5 text-center">
-        <h1 class="mb-5">Warranty Tracking App</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="mb-0" style="margin-left: 20px;">Warranty Tracking App</h1>
+        <div class="custom-margin" style="text-align: right !important;">
+            <a href="{{ url_for('full_list_route') }}" type="button" class="custom-margin" style="color: black;">Full List</a>
+            <a href="{{ url_for('add_item_route') }}" type="button" class="custom-button">Add New Item</a>
+        </div>
     </div>
 
-            <div class="custom-margin text-center">
-                <a href="{{ url_for('add_item_route') }}" type="button" class="custom-button custom-margin">Add New Item</a>
-                <a href="{{ url_for('full_list_route') }}" type="button" class="custom-button custom-margin">View Full List</a>
-            </div>
+    <div class="custom-card custom-margin">
+        <div class="new-card-header m-3">
+            <h4>Closest Expirations</h4>
+        </div>
 
+        <div>
+            <ul class="horizontal-list">
+                {% for item in closest_items %}
+                    <li class="text-center">
+                        <a href="{{ url_for('item_page', item_id=item['id']) }}">
+                            <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}">
+                        </a>
 
-            <div class="custom-card custom-margin">
-                <div class="new-card-header m-md-3">
-                    <h4>Closest Expirations</h4>
-                </div>
-
-                <div class=>
-                    <ul class="horizontal-list">
-                        {% for item in closest_items %}
-                            <li class="text-center">
-                                <a href="{{ url_for('item_page', item_id=item['id']) }}">
-                                    <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}">
-                                </a>
-
-                                <div>
-                                    {{ item['name'] }}
-                                    <h6>Warranty Expires on</h6>
-                                    {{ item['warranty_expiration_date'] }}
-                                </div>
-                            </li>
-
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <div class="custom-card custom-margin ">
-                <div class="new-card-header m-md-4">
-                    <h4>Recently Added</h4>
-                </div>
-
-                <div>
-                    <ul class="horizontal-list">
-                        {% for item in recent_items %}
-                            <li>
-                                <a href="{{ url_for('item_page', item_id=item['id']) }}">
-                                    <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}">
-                                </a>
-                            </li>
-                            <li>
-                                <div>
-                                    {{ item['name'] }}
-                                    <h6>Warranty Expires on</h6>
-                                    {{ item['warranty_expiration_date'] }}
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
+                        <div>
+                            {{ item['name'] }}
+                            <h6>Warranty Expires on</h6>
+                            {{ item['warranty_expiration_date'] }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+    <div class="custom-card custom-margin">
+        <div class="new-card-header m-3">
+            <h4>Recently Added</h4>
+        </div>
+
+        <div>
+            <ul class="horizontal-list">
+                {% for item in recent_items %}
+                    <li class="text-center">
+                        <a href="{{ url_for('item_page', item_id=item['id']) }}">
+                            <img src="{{ item['thumbnail'] }}" alt="{{ item['name'] }}">
+                        </a>
+                        <div>
+                            {{ item['name'] }}
+                            <h6>Warranty Expires on</h6>
+                            {{ item['warranty_expiration_date'] }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
