@@ -7,8 +7,7 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
-credentials_source_path = r'E:\Code\python\cursor-ai-project-flask-app/env_files'
-
+credentials_source_path = os.path.join('warranty-manager-flask-app', 'env_files')
 
 class EventParams:
     summary: Optional[str] = None
