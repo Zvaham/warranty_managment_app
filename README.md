@@ -1,4 +1,4 @@
-Warranty Tracker App
+### Warranty Tracker App
 Overview
 
 The Warranty Tracker App is a Python web application built to help users manage and keep track of warranty information for various items. It provides a user-friendly interface to add, update, delete, and view items, along with features such as reminders and a full list display.
