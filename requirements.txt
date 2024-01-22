@@ -14,7 +14,6 @@ prettytable
 python-dateutil
 six
 SQLAlchemy
-typing_extensions
 wcwidth
 Werkzeug
 WTForms

@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, current_app
 import uuid
-from database import *
-from utils import *
-from cal_utils import *
+from utils.utils import *
+from utils.database import *
+from utils.cal_utils import *
+from flask import Flask, render_template, request, redirect, url_for
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'

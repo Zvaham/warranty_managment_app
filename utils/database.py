@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime
 from app import current_app
 
-DATABASE = 'list.db'
+DATABASE = f'database\\list.db'
 
 
 def create_database():
